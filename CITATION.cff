@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite the repository and the original work acknowledged in the README."
+type: software
+title: "Weight Space: Direct Policy Weight Editing"
+version: 0.1.0
+authors:
+  - name: "Abhijit"
+repository-code: "https://github.com/Abhijit-without-h/weight-space"
+url: "https://github.com/Abhijit-without-h/weight-space"
+license: Apache-2.0
+abstract: >-
+  An independent experiment in compiling restricted teacher-derived spatial
+  controllers directly into existing grid-game policy weights, without
+  gradient training during editing. Includes four games, twelve existing
+  checkpoints, a calibration gate, evaluation evidence, and reproducible analysis.
+keywords:
+  - weight editing
+  - reinforcement learning
+  - reproducibility

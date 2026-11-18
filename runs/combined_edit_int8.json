@@ -1,0 +1,47 @@
+{
+  "method": "Astra-designed Pong revision 2, then per-tensor int8 weight storage; dequantize once before float32 inference",
+  "checkpoint": "runs/one_shot_policy_edit_revision2.pt",
+  "int8_artifact": "runs/pong_astra_revision2_int8.npz",
+  "seeds": [
+    90101,
+    100103,
+    110107,
+    120109,
+    130111
+  ],
+  "episodes_per_seed": 512,
+  "valid_observations": 8192,
+  "float32": {
+    "artifact_bytes": 70594,
+    "return": {
+      "episodes": 2560,
+      "mean_return": 10.0,
+      "se_return": 0.0,
+      "min_return": 10.0,
+      "max_return": 10.0
+    }
+  },
+  "int8_storage": {
+    "artifact_bytes": 19876,
+    "return": {
+      "episodes": 2560,
+      "mean_return": 10.0,
+      "se_return": 0.0,
+      "min_return": 10.0,
+      "max_return": 10.0
+    },
+    "action_agreement_with_edited_float32": 1.0
+  },
+  "paired_return_delta": {
+    "episodes": 2560,
+    "mean_return": 0.0,
+    "se_return": 0.0,
+    "min_return": 0.0,
+    "max_return": 0.0
+  },
+  "limitations": [
+    "This is the second game-aware edit after the first failed.",
+    "Int8 weights are dequantized before inference; no integer compute speedup is claimed.",
+    "Score comparison uses the same fixed initial states; post-action trajectories can diverge."
+  ]
+}

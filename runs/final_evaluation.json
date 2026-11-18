@@ -1,0 +1,138 @@
+{
+  "breakout": {
+    "random": {
+      "episodes": 1000,
+      "mean_return": 1.386,
+      "se_return": 0.12068790150454009,
+      "mean_length": 21.778,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "scripted": {
+      "episodes": 1000,
+      "mean_return": 15.157,
+      "se_return": 0.038676179320698764,
+      "mean_length": 159.505,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "policy": {
+      "episodes": 1000,
+      "mean_return": 6.659,
+      "se_return": 0.2101830057257149,
+      "mean_length": 61.213,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "sampled": {
+      "episodes": 1000,
+      "mean_return": 6.432,
+      "se_return": 0.21363758334388877,
+      "mean_length": 58.636,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    }
+  },
+  "pong": {
+    "random": {
+      "episodes": 1000,
+      "mean_return": -1.827,
+      "se_return": 0.015274302088943517,
+      "mean_length": 7.768,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "scripted": {
+      "episodes": 1000,
+      "mean_return": 10.0,
+      "se_return": 0.0,
+      "mean_length": 150.0,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "policy": {
+      "episodes": 1000,
+      "mean_return": 8.548,
+      "se_return": 0.12381852457135414,
+      "mean_length": 132.455,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "sampled": {
+      "episodes": 1000,
+      "mean_return": 7.169,
+      "se_return": 0.15593188818761144,
+      "mean_length": 116.877,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    }
+  },
+  "pacman": {
+    "random": {
+      "episodes": 1000,
+      "mean_return": 16.617,
+      "se_return": 0.24963298585649218,
+      "mean_length": 119.539,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "scripted": {
+      "episodes": 1000,
+      "mean_return": 26.073,
+      "se_return": 0.6200452621600517,
+      "mean_length": 30.733,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "policy": {
+      "episodes": 1000,
+      "mean_return": 43.785,
+      "se_return": 0.26730549419573707,
+      "mean_length": 112.857,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    },
+    "sampled": {
+      "episodes": 1000,
+      "mean_return": 43.368,
+      "se_return": 0.27233204134060457,
+      "mean_length": 108.87,
+      "mean_crossings": 0.0,
+      "mean_hits": 0.0
+    }
+  },
+  "freeway": {
+    "random": {
+      "episodes": 1000,
+      "mean_return": -0.012814083587378263,
+      "se_return": 0.00424602302712799,
+      "mean_length": 120.0,
+      "mean_crossings": 0.019,
+      "mean_hits": 5.795
+    },
+    "scripted": {
+      "episodes": 1000,
+      "mean_return": 8.378416705444454,
+      "se_return": 0.12111373775260387,
+      "mean_length": 120.0,
+      "mean_crossings": 8.496,
+      "mean_hits": 12.597
+    },
+    "policy": {
+      "episodes": 1000,
+      "mean_return": 10.151413893286138,
+      "se_return": 0.10109149478708379,
+      "mean_length": 120.0,
+      "mean_crossings": 10.28,
+      "mean_hits": 5.223
+    },
+    "sampled": {
+      "episodes": 1000,
+      "mean_return": 9.940544377069921,
+      "se_return": 0.08969901646903272,
+      "mean_length": 120.0,
+      "mean_crossings": 10.068,
+      "mean_hits": 5.62
+    }
+  }
+}

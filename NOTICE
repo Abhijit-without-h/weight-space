@@ -1,0 +1,21 @@
+Weight Space
+Copyright 2026 Abhijit
+
+This repository's original code, documentation, and numerical results
+are provided under Apache License 2.0.
+See LICENSE for the full terms. External dependencies and referenced works
+remain under their respective licenses.
+
+The grid-game setup and policy architecture were inspired by:
+Rikiya Takehi, Jayden Teoh, Alex Zhang, and Omar Khattab,
+"Sparks of Weight-Space Programming" (2026).
+https://rikiyat.github.io/blog/weight-space-programming/
+
+This project is an independent implementation and extension. The reference
+is scientific attribution, not a claim of affiliation or endorsement.
+The authors' report and external source repositories are not redistributed
+as part of this publication.
+
+AI coding and editing assistance was used. The separate manual Pong patch
+is attributed to Astra; the spatial editor is a fixed search-and-compile
+algorithm. See README.md for the experimental boundaries and attribution.

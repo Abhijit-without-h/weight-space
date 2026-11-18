@@ -1,0 +1,964 @@
+{
+  "config": {
+    "output": "runs/policy_efficiency.json",
+    "observations": 8192,
+    "episodes": 256,
+    "repeats": 500,
+    "rounds": 7,
+    "seed": 20261115
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "threads": 1,
+    "quantized_engines": [
+      "qnnpack"
+    ],
+    "quantized_engine": "qnnpack"
+  },
+  "notes": [
+    "Int8 per-tensor/per-row variants quantize weights only; biases/scales float32; dequantization occurs once before timing.",
+    "dynamic_int8 uses native CPU int8 linear kernels and dynamically quantized activations. Accuracy is measured on the full corpus batch; activation quantization can depend on batch composition.",
+    "Float16 latency includes float32-input to float16 and output to float32 casts.",
+    "Artifact bytes use uncompressed NPZ for storage variants and torch.save(state_dict) for native int8; container overhead differs.",
+    "Greedy returns are separate rollouts with a shared seed; trajectory divergence prevents treating differences as paired causal estimates.",
+    "Latency measures model calls only, excludes game/environment/serialization and one-time loading; warm process, single thread; medians across rounds."
+  ],
+  "games": {
+    "breakout": {
+      "checkpoint": "runs/breakout_seed0.pt",
+      "checkpoint_sha256": "b802f893c73bfc276b5839c571d5ff3657c43fc1ed8b8095d62b047e75be461e",
+      "parameters": 17253,
+      "corpus_sha256": "66f6d726dfc8063a130360cfdeeaf4f310ddb53d696db12fe0c2852e79688cc0",
+      "variants": {
+        "float32": {
+          "raw_tensor_bytes": 69012,
+          "artifact_bytes": 70594,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0,
+          "max_absolute_logit_error": 0.0,
+          "latency": {
+            "1": {
+              "median_us_per_call": 14.768584,
+              "min_us_per_call": 13.750166,
+              "round_us_per_call": [
+                15.048165999999998,
+                14.84325,
+                15.052416,
+                14.768584,
+                14.34,
+                13.750166,
+                13.779584000000002
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 37.888832,
+              "min_us_per_call": 37.61375,
+              "round_us_per_call": [
+                37.837416,
+                37.70325,
+                38.09775,
+                38.104832,
+                37.888832,
+                37.61375,
+                38.110417999999996
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 5.3828125,
+            "se_return": 0.41344003804446755,
+            "mean_length": 51.3359375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "int8_per_tensor": {
+          "raw_tensor_bytes": 17472,
+          "artifact_bytes": 19876,
+          "action_agreement": 0.998291015625,
+          "mean_absolute_logit_error": 0.008020303212106228,
+          "max_absolute_logit_error": 0.06418466567993164,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.903,
+              "min_us_per_call": 13.860916,
+              "round_us_per_call": [
+                13.880332000000001,
+                13.9795,
+                13.860916,
+                13.926584,
+                13.862,
+                14.001916,
+                13.903
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 38.0565,
+              "min_us_per_call": 37.87,
+              "round_us_per_call": [
+                37.923582,
+                37.984666,
+                38.251166,
+                39.958,
+                37.87,
+                38.0565,
+                38.0995
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 5.3828125,
+            "se_return": 0.41344003804446755,
+            "mean_length": 51.3359375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "int8_per_row": {
+          "raw_tensor_bytes": 17736,
+          "artifact_bytes": 20140,
+          "action_agreement": 0.9971923828125,
+          "mean_absolute_logit_error": 0.007595228496938944,
+          "max_absolute_logit_error": 0.058652281761169434,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.8115,
+              "min_us_per_call": 13.728,
+              "round_us_per_call": [
+                13.959082,
+                13.782665999999999,
+                13.8115,
+                13.785665999999999,
+                13.851666,
+                13.728,
+                13.920834000000001
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 38.130916,
+              "min_us_per_call": 37.943584,
+              "round_us_per_call": [
+                37.943584,
+                37.970084,
+                38.130916,
+                38.1235,
+                38.28375,
+                38.2135,
+                38.191165999999996
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 5.3828125,
+            "se_return": 0.41344003804446755,
+            "mean_length": 51.3359375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "float16": {
+          "raw_tensor_bytes": 34506,
+          "artifact_bytes": 36088,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0006544736679643393,
+          "max_absolute_logit_error": 0.004870414733886719,
+          "latency": {
+            "1": {
+              "median_us_per_call": 14.363582000000001,
+              "min_us_per_call": 14.293834,
+              "round_us_per_call": [
+                14.376168,
+                14.293834,
+                14.489415999999999,
+                14.33975,
+                14.322666,
+                14.427416,
+                14.363582000000001
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 79.505668,
+              "min_us_per_call": 77.76791800000001,
+              "round_us_per_call": [
+                77.76791800000001,
+                78.953584,
+                81.384166,
+                79.505668,
+                78.245,
+                82.190916,
+                85.564834
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 5.3828125,
+            "se_return": 0.41344003804446755,
+            "mean_length": 51.3359375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "dynamic_int8": {
+          "raw_tensor_bytes": null,
+          "artifact_bytes": 22207,
+          "action_agreement": 0.990966796875,
+          "mean_absolute_logit_error": 0.010757178999483585,
+          "max_absolute_logit_error": 0.09063315391540527,
+          "latency": {
+            "1": {
+              "median_us_per_call": 236.617334,
+              "min_us_per_call": 235.768332,
+              "round_us_per_call": [
+                236.617334,
+                239.21625,
+                239.61975,
+                239.924418,
+                236.106416,
+                236.084334,
+                235.768332
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 299.463,
+              "min_us_per_call": 280.82525,
+              "round_us_per_call": [
+                299.463,
+                286.7785,
+                280.82525,
+                294.547334,
+                330.519582,
+                388.384,
+                338.309582
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 5.3828125,
+            "se_return": 0.41344003804446755,
+            "mean_length": 51.3359375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        }
+      }
+    },
+    "pong": {
+      "checkpoint": "runs/pong_seed1.pt",
+      "checkpoint_sha256": "90bd4295f9313bbbcfd7cde840933f8affef4063c330ef662533bab91419bff4",
+      "parameters": 17253,
+      "corpus_sha256": "06dc774ead5dfe19708917f91122c1a4d4debb6e9373460ac18db3421b091d43",
+      "variants": {
+        "float32": {
+          "raw_tensor_bytes": 69012,
+          "artifact_bytes": 70594,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0,
+          "max_absolute_logit_error": 0.0,
+          "latency": {
+            "1": {
+              "median_us_per_call": 16.0375,
+              "min_us_per_call": 15.8705,
+              "round_us_per_call": [
+                16.499166000000002,
+                16.0375,
+                16.779083999999997,
+                16.03475,
+                15.91475,
+                16.4065,
+                15.8705
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 51.761168,
+              "min_us_per_call": 42.520584,
+              "round_us_per_call": [
+                42.520584,
+                48.89725,
+                51.761168,
+                51.415168,
+                88.81108400000001,
+                93.77175,
+                94.64766800000001
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 8.265625,
+            "se_return": 0.26423729204514823,
+            "mean_length": 129.04296875,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "int8_per_tensor": {
+          "raw_tensor_bytes": 17472,
+          "artifact_bytes": 19876,
+          "action_agreement": 0.9991455078125,
+          "mean_absolute_logit_error": 0.012757006101310253,
+          "max_absolute_logit_error": 0.06788003444671631,
+          "latency": {
+            "1": {
+              "median_us_per_call": 15.515416,
+              "min_us_per_call": 14.97925,
+              "round_us_per_call": [
+                25.221666000000003,
+                19.331084,
+                15.515416,
+                14.97925,
+                15.176917999999999,
+                15.329,
+                15.7675
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 39.68725,
+              "min_us_per_call": 38.215834,
+              "round_us_per_call": [
+                58.571,
+                41.157084000000005,
+                41.6925,
+                39.68725,
+                38.490916,
+                38.531834,
+                38.215834
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 8.265625,
+            "se_return": 0.26423729204514823,
+            "mean_length": 129.04296875,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "int8_per_row": {
+          "raw_tensor_bytes": 17736,
+          "artifact_bytes": 20140,
+          "action_agreement": 0.994384765625,
+          "mean_absolute_logit_error": 0.008112423121929169,
+          "max_absolute_logit_error": 0.05141746997833252,
+          "latency": {
+            "1": {
+              "median_us_per_call": 15.116665999999999,
+              "min_us_per_call": 14.926168,
+              "round_us_per_call": [
+                15.620332000000001,
+                15.058665999999999,
+                15.116665999999999,
+                14.926168,
+                15.310082,
+                14.976916,
+                15.52625
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 42.4975,
+              "min_us_per_call": 40.564334,
+              "round_us_per_call": [
+                64.226,
+                48.657584,
+                40.564334,
+                42.048165999999995,
+                44.557668,
+                42.4975,
+                42.119918
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 8.265625,
+            "se_return": 0.26423729204514823,
+            "mean_length": 129.04296875,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "float16": {
+          "raw_tensor_bytes": 34506,
+          "artifact_bytes": 36088,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0004191533662378788,
+          "max_absolute_logit_error": 0.0045299530029296875,
+          "latency": {
+            "1": {
+              "median_us_per_call": 15.247832,
+              "min_us_per_call": 14.355834000000002,
+              "round_us_per_call": [
+                17.252831999999998,
+                15.329165999999999,
+                20.437666,
+                14.579082,
+                15.247832,
+                14.509832000000001,
+                14.355834000000002
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 83.866582,
+              "min_us_per_call": 80.167584,
+              "round_us_per_call": [
+                81.944918,
+                85.8085,
+                86.341,
+                83.791084,
+                83.866582,
+                86.315416,
+                80.167584
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 8.265625,
+            "se_return": 0.26423729204514823,
+            "mean_length": 129.04296875,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "dynamic_int8": {
+          "raw_tensor_bytes": null,
+          "artifact_bytes": 22207,
+          "action_agreement": 0.9969482421875,
+          "mean_absolute_logit_error": 0.012852489948272705,
+          "max_absolute_logit_error": 0.07792794704437256,
+          "latency": {
+            "1": {
+              "median_us_per_call": 240.641834,
+              "min_us_per_call": 224.196168,
+              "round_us_per_call": [
+                247.55775,
+                256.11925,
+                270.732584,
+                228.502916,
+                224.196168,
+                230.1335,
+                240.641834
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 303.549332,
+              "min_us_per_call": 284.212582,
+              "round_us_per_call": [
+                324.09141600000004,
+                304.835,
+                307.67541600000004,
+                300.07483399999995,
+                284.212582,
+                303.549332,
+                302.883584
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 8.265625,
+            "se_return": 0.26423729204514823,
+            "mean_length": 129.04296875,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        }
+      }
+    },
+    "pacman": {
+      "checkpoint": "runs/pacman_seed0.pt",
+      "checkpoint_sha256": "299f2bfb3091113ff5956343ca5a77978cb1335e7ec95b7ea65bc9e5c6788e57",
+      "parameters": 17253,
+      "corpus_sha256": "70a64d8ab9565160dd28027a679740a8e680ac2027773fc8f56162fe2f2edf05",
+      "variants": {
+        "float32": {
+          "raw_tensor_bytes": 69012,
+          "artifact_bytes": 70594,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0,
+          "max_absolute_logit_error": 0.0,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.717666,
+              "min_us_per_call": 13.647,
+              "round_us_per_call": [
+                13.924584000000001,
+                13.717666,
+                13.7185,
+                13.66625,
+                13.647,
+                13.746834000000002,
+                13.703332
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 36.965834,
+              "min_us_per_call": 36.87925,
+              "round_us_per_call": [
+                36.978916,
+                37.058668,
+                36.87925,
+                36.886,
+                36.92575,
+                37.023165999999996,
+                36.965834
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 43.68359375,
+            "se_return": 0.5802532183383421,
+            "mean_length": 111.77734375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "int8_per_tensor": {
+          "raw_tensor_bytes": 17472,
+          "artifact_bytes": 19876,
+          "action_agreement": 0.9970703125,
+          "mean_absolute_logit_error": 0.015211237594485283,
+          "max_absolute_logit_error": 0.07576674222946167,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.717084000000002,
+              "min_us_per_call": 13.649415999999999,
+              "round_us_per_call": [
+                13.724165999999999,
+                13.688582,
+                13.684666,
+                13.649415999999999,
+                13.732334000000002,
+                13.751834,
+                13.717084000000002
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 36.792082,
+              "min_us_per_call": 36.73625,
+              "round_us_per_call": [
+                36.855917999999996,
+                36.773834,
+                36.73625,
+                36.792082,
+                36.763166,
+                36.836332,
+                36.83625
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 43.46875,
+            "se_return": 0.588307095801664,
+            "mean_length": 112.1796875,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "int8_per_row": {
+          "raw_tensor_bytes": 17736,
+          "artifact_bytes": 20140,
+          "action_agreement": 0.997802734375,
+          "mean_absolute_logit_error": 0.012445281259715557,
+          "max_absolute_logit_error": 0.07775986194610596,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.678668,
+              "min_us_per_call": 13.67125,
+              "round_us_per_call": [
+                13.75675,
+                13.722415999999999,
+                13.67825,
+                13.678668,
+                13.70675,
+                13.67125,
+                13.672
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 36.957834000000005,
+              "min_us_per_call": 36.80775,
+              "round_us_per_call": [
+                36.860084,
+                37.206584,
+                36.926832000000005,
+                36.957834000000005,
+                36.971,
+                36.80775,
+                40.056666
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 43.1640625,
+            "se_return": 0.5597715605357969,
+            "mean_length": 109.6484375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "float16": {
+          "raw_tensor_bytes": 34506,
+          "artifact_bytes": 36088,
+          "action_agreement": 0.9998779296875,
+          "mean_absolute_logit_error": 0.0005665633943863213,
+          "max_absolute_logit_error": 0.00316619873046875,
+          "latency": {
+            "1": {
+              "median_us_per_call": 15.301582,
+              "min_us_per_call": 14.691666,
+              "round_us_per_call": [
+                14.691666,
+                14.9995,
+                15.38,
+                15.273834,
+                15.369,
+                15.372916,
+                15.301582
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 82.291916,
+              "min_us_per_call": 79.187916,
+              "round_us_per_call": [
+                84.959,
+                82.641334,
+                84.860834,
+                79.960832,
+                79.484084,
+                79.187916,
+                82.291916
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 43.6875,
+            "se_return": 0.5804330913459465,
+            "mean_length": 111.77734375,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        },
+        "dynamic_int8": {
+          "raw_tensor_bytes": null,
+          "artifact_bytes": 22207,
+          "action_agreement": 0.9964599609375,
+          "mean_absolute_logit_error": 0.015199653804302216,
+          "max_absolute_logit_error": 0.11457431316375732,
+          "latency": {
+            "1": {
+              "median_us_per_call": 227.082666,
+              "min_us_per_call": 225.566832,
+              "round_us_per_call": [
+                232.204082,
+                227.54041800000002,
+                225.566832,
+                227.082666,
+                226.565416,
+                230.028834,
+                226.969334
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 278.669,
+              "min_us_per_call": 276.39375,
+              "round_us_per_call": [
+                280.938832,
+                279.083584,
+                278.669,
+                277.525832,
+                276.39375,
+                278.20908199999997,
+                278.97175
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 43.15234375,
+            "se_return": 0.5852959621098558,
+            "mean_length": 109.390625,
+            "mean_crossings": 0.0,
+            "mean_hits": 0.0
+          }
+        }
+      }
+    },
+    "freeway": {
+      "checkpoint": "runs/freeway_seed1.pt",
+      "checkpoint_sha256": "8a85bd1e5fcc397ce66efb8bd579b4d73f9b3e5373dd6fb9830e089784623689",
+      "parameters": 17253,
+      "corpus_sha256": "2dc983cc0bede00ae25849a3c6261d0b53b3e6192b8f02e65e67cb08c8c0a8f6",
+      "variants": {
+        "float32": {
+          "raw_tensor_bytes": 69012,
+          "artifact_bytes": 70594,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0,
+          "max_absolute_logit_error": 0.0,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.876415999999999,
+              "min_us_per_call": 13.857668,
+              "round_us_per_call": [
+                13.890082,
+                14.013084000000001,
+                14.064,
+                13.876415999999999,
+                13.857668,
+                13.867084,
+                13.874082
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 38.17925,
+              "min_us_per_call": 37.893084,
+              "round_us_per_call": [
+                37.966834000000006,
+                37.9735,
+                42.912834000000004,
+                38.17925,
+                37.893084,
+                39.213582,
+                38.799834000000004
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 9.970013154510525,
+            "se_return": 0.21462875659464667,
+            "mean_length": 120.0,
+            "mean_crossings": 10.09765625,
+            "mean_hits": 5.86328125
+          }
+        },
+        "int8_per_tensor": {
+          "raw_tensor_bytes": 17472,
+          "artifact_bytes": 19876,
+          "action_agreement": 0.9993896484375,
+          "mean_absolute_logit_error": 0.004907095339149237,
+          "max_absolute_logit_error": 0.0665903091430664,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.704415999999998,
+              "min_us_per_call": 13.673665999999999,
+              "round_us_per_call": [
+                13.734668,
+                13.704415999999998,
+                13.751082,
+                13.68725,
+                13.673665999999999,
+                13.6815,
+                13.723415999999999
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 37.541,
+              "min_us_per_call": 36.875415999999994,
+              "round_us_per_call": [
+                37.21375,
+                36.875415999999994,
+                37.977834,
+                38.43925,
+                39.6895,
+                37.389334000000005,
+                37.541
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 9.970051830474404,
+            "se_return": 0.214629383418506,
+            "mean_length": 120.0,
+            "mean_crossings": 10.09765625,
+            "mean_hits": 5.86328125
+          }
+        },
+        "int8_per_row": {
+          "raw_tensor_bytes": 17736,
+          "artifact_bytes": 20140,
+          "action_agreement": 0.999755859375,
+          "mean_absolute_logit_error": 0.005090564955025911,
+          "max_absolute_logit_error": 0.05204296112060547,
+          "latency": {
+            "1": {
+              "median_us_per_call": 13.771082,
+              "min_us_per_call": 13.694666,
+              "round_us_per_call": [
+                13.771082,
+                13.811582,
+                13.789,
+                13.808832,
+                13.751665999999998,
+                13.694666,
+                13.724165999999999
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 46.845918,
+              "min_us_per_call": 37.000582,
+              "round_us_per_call": [
+                37.000582,
+                37.04,
+                37.222582,
+                46.845918,
+                56.613,
+                58.667,
+                51.879667999999995
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 10.016714730430976,
+            "se_return": 0.21108761743920662,
+            "mean_length": 120.0,
+            "mean_crossings": 10.14453125,
+            "mean_hits": 5.765625
+          }
+        },
+        "float16": {
+          "raw_tensor_bytes": 34506,
+          "artifact_bytes": 36088,
+          "action_agreement": 1.0,
+          "mean_absolute_logit_error": 0.0009920645970851183,
+          "max_absolute_logit_error": 0.004723548889160156,
+          "latency": {
+            "1": {
+              "median_us_per_call": 14.865,
+              "min_us_per_call": 14.812415999999999,
+              "round_us_per_call": [
+                17.174834,
+                15.39425,
+                14.894418,
+                14.865,
+                14.854582,
+                14.846665999999999,
+                14.812415999999999
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 81.18375,
+              "min_us_per_call": 80.458084,
+              "round_us_per_call": [
+                80.461,
+                81.391166,
+                80.458084,
+                81.18375,
+                80.46241599999999,
+                82.089416,
+                81.217084
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 9.970013154510525,
+            "se_return": 0.21462875659464667,
+            "mean_length": 120.0,
+            "mean_crossings": 10.09765625,
+            "mean_hits": 5.86328125
+          }
+        },
+        "dynamic_int8": {
+          "raw_tensor_bytes": null,
+          "artifact_bytes": 22207,
+          "action_agreement": 0.999755859375,
+          "mean_absolute_logit_error": 0.008038698695600033,
+          "max_absolute_logit_error": 0.07385444641113281,
+          "latency": {
+            "1": {
+              "median_us_per_call": 225.709418,
+              "min_us_per_call": 224.64491800000002,
+              "round_us_per_call": [
+                233.307832,
+                230.516416,
+                228.441416,
+                225.509166,
+                225.55766599999998,
+                225.709418,
+                224.64491800000002
+              ],
+              "batch_size": 1
+            },
+            "64": {
+              "median_us_per_call": 277.624084,
+              "min_us_per_call": 277.200416,
+              "round_us_per_call": [
+                277.624084,
+                278.99175,
+                280.16575,
+                277.444082,
+                277.200416,
+                277.29,
+                278.05025
+              ],
+              "batch_size": 64
+            }
+          },
+          "greedy_evaluation": {
+            "episodes": 256,
+            "mean_return": 9.966022521417472,
+            "se_return": 0.214620954207634,
+            "mean_length": 120.0,
+            "mean_crossings": 10.09375,
+            "mean_hits": 5.82421875
+          }
+        }
+      }
+    }
+  }
+}

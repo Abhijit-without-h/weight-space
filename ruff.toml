@@ -1,0 +1,10 @@
+line-length = 88
+target-version = "py312"
+
+# These are frozen evidence inputs; reformatting would change recorded hashes.
+extend-exclude = [
+  "benchmark_spatial_edit.py",
+  ".agents",
+  ".publication",
+  "vendor",
+]

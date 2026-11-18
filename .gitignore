@@ -1,0 +1,96 @@
+# Local environments, caches, and generated builds
+.venv*/
+.pip-cache/
+.uv-cache/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+node_modules/
+/dist/
+/artifacts/
+/web/downloads/
+.DS_Store
+.env
+.env.*
+
+# Local tools, downloaded models, private exports, and pilot sessions
+/.agents/
+/.claude/
+/.publication/
+/vendor/
+/models/
+/aws_pilot/
+/blind_exports/
+/blind_trial/
+/private_exports/
+/private_trial/
+/blind_prompt_variants/
+/blind_prompt_variants_3dp/
+/reader_ladder/
+/renders/
+/blind_exports_package.tar.gz
+/private_exports_index.json
+/visual_data.json
+
+# Local briefs and development records
+/main.md
+/test.md
+/read-test.md
+/constraint.md
+/RESEARCH_PLAN.md
+/AWS_T4_RUNBOOK.md
+/docs/launch-design.md
+/docs/launch-verification.md
+
+# Public copies generated from canonical inputs by the build script
+/web/STUDY.md
+/web/SPATIAL_EDIT.md
+/web/POLICY_RESULTS.md
+/web/robustness-protocol.md
+/web/protocol.txt
+/web/edit-robustness.json
+/web/spatial-edit-validation.json
+/web/LICENSE
+/web/NOTICE
+
+# Curated evidence and small checkpoints only
+/runs/*
+!/runs/edit_robustness.json
+!/runs/spatial_edit_validation.json
+!/runs/spatial_edit.json
+!/runs/final_evaluation.json
+!/runs/policy_efficiency.json
+!/runs/combined_edit_int8.json
+!/runs/one_shot_policy_edit.json
+!/runs/one_shot_policy_edit_revision2.json
+
+# Research notes stay local; only the root README is published.
+*.md
+!/README.md
+/notes/
+
+# Model weights are never committed, including generated policy artifacts.
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.gguf
+*.onnx
+*.npz
+*.bin
+
+# The website is maintained locally for a separate private repository.
+/web/
+/site-manifest.json
+/scripts/build_site.py
+/scripts/check_site.py
+/scripts/social_card.swift
+/netlify.toml
+/package.json
+/package-lock.json
+/.prettierrc.json
+
+# Additional research evidence (no weights).
+!/runs/pong_edit_revision.json
+!/runs/sokoban_data.json
+/make_edit_replay.py

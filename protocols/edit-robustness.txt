@@ -1,0 +1,49 @@
+# Frozen retrospective robustness protocol
+
+Written on 18 November 2026 before executing `evaluate_edit_robustness.py`.
+This is a retrospective extension of an already observed four-game result,
+not an independent preregistration or a confirmatory test of a new theory.
+
+## Question
+
+Does the existing demonstration-to-weight compiler and calibration gate help
+the three available independently initialized policies in each of four games?
+No new policy training or fine-tuning is permitted. All editing is direct
+tensor assignment/addition under inference mode; no optimizer or backward
+pass is used.
+
+## Fixed inputs
+
+- Checkpoints: `runs/{game}_seed{0,1,2}.pt` for Breakout, Pong, Pac-Man, Freeway.
+  Include all twelve; do not select on the new results. Breakout seed 0 and
+  Freeway seed 1 have 8,192,000 training transitions, the others 1,638,400.
+  This is a heterogeneous existing-checkpoint collection, not balanced new training.
+- Support: existing `support` function, seed 137177, 128 labels per game from
+  the existing scripted teacher. Use one shared support set per game.
+- Rule fitting: existing `fit`; no changes to enumeration or tie handling.
+- Compilation: existing `compile_rule`; no new hyperparameters.
+- Gate: accept exactly when edited mean return is greater than original mean
+  return on 16 episodes, calibration seed 385997. Gate separately per checkpoint.
+- Evaluation: seeds 531103 + 211*i, i=0..11; 64 episodes per seed per variant.
+  Use the first terminal event per environment, paired starting cohorts.
+- References: original, forced edit, selected (gate), and direct teacher.
+
+## Outcomes
+
+Record every checkpoint hash, training budget, changed scalar count, fitted
+rule, calibration means, acceptance decision, all evaluation seed means,
+per-checkpoint paired gains and 95% t intervals across the 12 evaluation seeds.
+Also record the number of accepted candidates with negative test mean gains;
+the gate is not guaranteed to prevent regressions. Retained-policy zero gains
+are identical policies, not evidence that the candidate is safe.
+
+Summarize per game with all three checkpoint rows. Give equal weight to each
+checkpoint when averaging gains; report checkpoint ranges and counts rather
+than treating 768 episodes as 768 independently trained models. Any intervals
+condition on the checkpoint and shared support set. Do not claim generalization
+to different teachers, controller families, unseen games, or LLMs.
+
+The test cohorts overlap the earlier follow-up. This extends checkpoint
+coverage, not environmental holdout novelty. Report that explicitly. Do not
+modify the method, gate, or seeds after reading outcomes; any later changes
+require a separately labelled protocol and dataset.
